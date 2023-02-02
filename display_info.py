@@ -1,3 +1,4 @@
+from datetime import date, datetime
 # function to display information based on user input
 
 def display_info(db):
@@ -16,7 +17,7 @@ def display_info(db):
         
         # if user inputs 2, display orders in a day from database
         elif action == "2":
-            day = input("Type which day to display: ")
+            day = input("Type which day to display (YYYY-MM-DD): ")
             print(count_orders_in_day(db, day))
             return
         
@@ -33,7 +34,7 @@ def display_info(db):
         
         # if user inputs 5, display total of specific day from database
         elif action == "5":
-            day = input("Type which day to display: ")
+            day = input("Type which day to display (YYYY-MM-DD): ")
             print(count_total_amount_in_day(db, day))
             return
         
@@ -55,7 +56,9 @@ def count_orders_in_day(db, day):
         for order in db[_user]:
             
             # Checks if the current order's date is the same as the day argument passed to the function
+            
             if day == order["order_date"]:
+                
                 
                 # If the order's date matches the day argument, the count variable is incremented by 1
                 count += 1
@@ -65,10 +68,10 @@ def count_orders_in_day(db, day):
         # If no orders were found on the given day, this line returns a string indicating that no orders were found
         return "No orders found on given day\n"
     
+    
     # If at least one order was found on the given day,
     # this line returns a string indicating the number of orders found and the date
     return str(count) + " orders found on " + day
-
 ''' 
     The following function `display_orders_by_customer` takes two parameters, db and customer.
     db is the database which holds the orders data, customer is the name of the customer we want to retrieve the

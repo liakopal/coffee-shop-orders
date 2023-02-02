@@ -3,6 +3,7 @@
     by them in the database db to a .txt file
 '''
 
+
 def export_to_txt(db, user):
     
     # Take user input to choose what to export
@@ -27,37 +28,49 @@ def export_to_txt(db, user):
         else:
             print("Please provide a valid input!\n")
 
-
 def export_customer_names(db):
     
     # Create an empty set to store unique customer names
-    customer = set()
+    customer_names = set()
+    
+    # Read the existing customer names from the file
+    with open("customer_names.txt", "r") as file:
+        existing_names = file.read().splitlines()
+        customer_names.update(existing_names)
+        existing_phones = file.read().splitlines()
+        customer_names.update(existing_phones)
     
     # Loop through the orders in the database
     for _user in db:
         for order in db[_user]:
             # Add the customer name to the set if it's not already there
-            customer.add(order["customer_name"])
+            customer_names.add(order["customer_name"] + " " + order["customer_phone_number"])
             
     # Open a file to write the customer names to        
     with open('customer_names.txt', 'w') as f:
         # Write the customer names, separated by newline
-        f.write("\n".join(customer))
+        f.write("\n".join(customer_names))
 
+
+def format_order(order):
+    return f"{order['customer_name']:<21}|{order['customer_address']:<23}| {order['order_date']:<14} | {order['total_amount']:<13}"
+
+from datetime import datetime
 
 def export_orders_by_user(db, user):
-    # Initialize an empty string to store the order information
+    now = datetime.now()
+    date_str = now.strftime("%Y-%m-%d")
+    time_str = now.strftime("%H:%M:%S")
     orders = ""
-    
-    # Loop through each user in the database
     for _user in db:
-        # Check if the current user is the desired user
         if _user == user:
-            # Loop through each order in the current user's order list
-            for order in db[_user]:
-                # Add the order information to the `order_info` string
-                orders += f"{order['customer_name']}, {order['customer_address']}, {order['order_date']}, {order['total_amount']}\n"
-    
-    # Write the `order_info` string to a file named "orders.txt"
-    with open('orders.txt', 'w') as f:
+            header = "Customer Name        Customer Address        Order Date       Total Amount\n"
+            separator = "-" * len(header) + "\n"
+            orders = separator + header + separator
+            for order in db[user]:
+                orders += format_order(order) + "\n"
+
+    with open('orders.txt', 'a') as f:
+        f.write("\n")  # Add empty line
+        f.write(f"Report Date: {date_str}, Report Time: {time_str}, User of Report: {user}\n")
         f.write(orders)

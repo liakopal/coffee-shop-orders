@@ -2,7 +2,6 @@
 '''
     This code implements a simple program that keeps track of orders made by customers
 '''
-
 from login import login
 from input_new_order import input_new_order
 from export_to_txt import export_to_txt
@@ -33,6 +32,7 @@ def main():
             # Calls the input_new_order(db, user) function, which is not defined in the code, with arguments `db` and `user`
             # It assigns the returned value to the `db` variable
             db = input_new_order(db, user)
+            # Code to add order to the `db` dictionary
         # Checks if the value of `action` is equal to 2, if it is, the program executes the code block under it
         elif action == "2":
             # Calls the `export_to_txt(db, user)` function, with arguments `db` and `user`

@@ -5,6 +5,7 @@
     If the entered username and password are not valid, the function prompts the user to try again.
 '''
 import getpass
+
 def login():
     # Prompt the user to enter their username with a while loop
     while True:
